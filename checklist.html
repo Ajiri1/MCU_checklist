@@ -1,0 +1,422 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MCU Checklist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --marvel-red: #ED1D24;
+      --marvel-dark: #111217;
+      --marvel-mid: #1c1f26;
+      --text: #f4f6f8;
+      --muted: #b7c0c9;
+      --accent: #ff4757;
+      --card: #171a21;
+      --ring: #ED1D24;
+      --white: #ffffff;
+    }* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(1200px 600px at 10% -10%, rgba(237,29,36,0.12), transparent),
+              radial-gradient(1000px 500px at 110% 10%, rgba(237,29,36,0.08), transparent),
+              var(--marvel-dark);
+  color: var(--text);
+  font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: saturate(1.2) blur(8px);
+  background: linear-gradient(180deg, rgba(17,18,23,0.9), rgba(17,18,23,0.6));
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px clamp(16px, 3vw, 28px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.marvel-tag {
+  background: var(--marvel-red);
+  color: var(--white);
+  padding: 6px 10px;
+  letter-spacing: 2px;
+  font-family: 'Bebas Neue', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 26px;
+  line-height: 1;
+  border-radius: 3px;
+  box-shadow: 0 6px 20px rgba(237,29,36,0.35);
+}
+
+.title {
+  font-weight: 700;
+  font-size: clamp(18px, 3.2vw, 22px);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+button, .pill {
+  background: linear-gradient(180deg, #20242d, #181b22);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+button:hover, .pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(237,29,36,0.18);
+  border-color: rgba(237,29,36,0.6);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.card {
+  grid-column: span 12;
+  background: radial-gradient(600px 400px at 10% -20%, rgba(237,29,36,0.08), transparent), var(--card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  overflow: hidden;
+}
+
+@media (min-width: 900px) {
+  .card { grid-column: span 6; }
+}
+
+.phase-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0));
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.phase-name {
+  font-family: 'Bebas Neue', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 28px;
+  letter-spacing: 1.5px;
+}
+
+.phase-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.list {
+  padding: 8px 18px 18px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px;
+  border-radius: 12px;
+  position: relative;
+  transition: background .15s ease, transform .05s ease;
+}
+
+.item:hover { background: rgba(255,255,255,0.04); }
+
+/* Custom checkbox */
+.tick {
+  --size: 18px;
+  width: var(--size);
+  height: var(--size);
+  border: 2px solid rgba(255,255,255,0.45);
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tick i {
+  width: 70%;
+  height: 70%;
+  display: block;
+  clip-path: polygon(14% 54%, 0 68%, 44% 100%, 100% 20%, 84% 8%, 41% 72%);
+  background: transparent;
+  transform: scale(.6);
+  transition: background .18s ease, transform .18s ease;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.label { cursor: pointer; user-select: none; }
+
+.item:has(input:checked) .tick {
+  background: linear-gradient(180deg, var(--marvel-red), #b51216);
+  border-color: #b51216;
+  box-shadow: 0 6px 18px rgba(237,29,36,0.35);
+}
+
+.item:has(input:checked) .tick i { background: white; transform: scale(1); }
+
+.item:has(input:checked) .label { color: #e6e9ed; text-decoration: line-through; opacity: 0.9; }
+
+.label small { color: var(--muted); font-weight: 600; letter-spacing: .2px; }
+
+/* Utilities */
+.muted { color: var(--muted); }
+
+footer {
+  opacity: .8; color: var(--muted); text-align: center; padding: 24px 0 32px;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="marvel-tag">MARVEL</div>
+        <div class="title">Cinematic Universe — Checklist</div>
+      </div>
+      <div class="controls" aria-label="Global actions">
+        <button id="checkAll">Check All</button>
+        <button id="uncheckAll">Uncheck All</button>
+        <button id="expandAll">Expand All</button>
+        <button id="collapseAll">Collapse All</button>
+      </div>
+    </div>
+  </header>  <main class="wrap">
+    <section class="grid"><!-- Phase 1 -->
+  <article class="card" data-phase>
+    <div class="phase-head">
+      <div class="phase-name">Phase 1</div>
+      <div class="phase-actions">
+        <button class="toggle">Toggle</button>
+        <button class="phase-check">Check</button>
+        <button class="phase-uncheck">Uncheck</button>
+      </div>
+    </div>
+    <div class="list">
+      <!-- Items -->
+      <label class="item">
+        <input type="checkbox" />
+        <span class="tick"><i></i></span>
+        <span class="label">Iron Man</span>
+      </label>
+      <label class="item">
+        <input type="checkbox" />
+        <span class="tick"><i></i></span>
+        <span class="label">The Incredible Hulk</span>
+      </label>
+      <label class="item">
+        <input type="checkbox" />
+        <span class="tick"><i></i></span>
+        <span class="label">Iron Man 2</span>
+      </label>
+      <label class="item">
+        <input type="checkbox" />
+        <span class="tick"><i></i></span>
+        <span class="label">Thor</span>
+      </label>
+      <label class="item">
+        <input type="checkbox" />
+        <span class="tick"><i></i></span>
+        <span class="label">Captain America: The First Avenger</span>
+      </label>
+      <label class="item">
+        <input type="checkbox" />
+        <span class="tick"><i></i></span>
+        <span class="label">The Avengers</span>
+      </label>
+    </div>
+  </article>
+
+  <!-- Phase 2 -->
+  <article class="card" data-phase>
+    <div class="phase-head">
+      <div class="phase-name">Phase 2</div>
+      <div class="phase-actions">
+        <button class="toggle">Toggle</button>
+        <button class="phase-check">Check</button>
+        <button class="phase-uncheck">Uncheck</button>
+      </div>
+    </div>
+    <div class="list">
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Iron Man 3</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Thor: The Dark World</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Captain America: The Winter Soldier</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Guardians of the Galaxy</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Avengers: Age of Ultron</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Ant-Man</span></label>
+    </div>
+  </article>
+
+  <!-- Phase 3 -->
+  <article class="card" data-phase>
+    <div class="phase-head">
+      <div class="phase-name">Phase 3</div>
+      <div class="phase-actions">
+        <button class="toggle">Toggle</button>
+        <button class="phase-check">Check</button>
+        <button class="phase-uncheck">Uncheck</button>
+      </div>
+    </div>
+    <div class="list">
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Captain America: Civil War</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Doctor Strange</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Guardians of the Galaxy Vol. 2</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Spider-Man: Homecoming</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Thor: Ragnarok</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Black Panther</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Avengers: Infinity War</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Ant-Man and the Wasp</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Captain Marvel</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Avengers: Endgame</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Spider-Man: Far From Home</span></label>
+    </div>
+  </article>
+
+  <!-- Phase 4 -->
+  <article class="card" data-phase>
+    <div class="phase-head">
+      <div class="phase-name">Phase 4</div>
+      <div class="phase-actions">
+        <button class="toggle">Toggle</button>
+        <button class="phase-check">Check</button>
+        <button class="phase-uncheck">Uncheck</button>
+      </div>
+    </div>
+    <div class="list">
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">WandaVision <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">The Falcon and the Winter Soldier <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Loki <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Black Widow</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">What If...? <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Shang-Chi and the Legend of the Ten Rings</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Eternals</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Hawkeye <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Spider-Man: No Way Home</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Moon Knight <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Doctor Strange in the Multiverse of Madness</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Ms. Marvel <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Thor: Love and Thunder</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">I Am Groot <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">She-Hulk: Attorney at Law <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Werewolf by Night <small>(Special)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Black Panther: Wakanda Forever</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">The Guardians of the Galaxy Holiday Special <small>(Disney+)</small></span></label>
+    </div>
+  </article>
+
+  <!-- Phase 5 -->
+  <article class="card" data-phase>
+    <div class="phase-head">
+      <div class="phase-name">Phase 5</div>
+      <div class="phase-actions">
+        <button class="toggle">Toggle</button>
+        <button class="phase-check">Check</button>
+        <button class="phase-uncheck">Uncheck</button>
+      </div>
+    </div>
+    <div class="list">
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Ant-Man and the Wasp: Quantumania</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Guardians of the Galaxy Vol. 3</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Secret Invasion <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Loki Season 2 <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">The Marvels</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Echo <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Deadpool &amp; Wolverine</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Agatha: Darkhold Diaries <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Ironheart <small>(Disney+)</small></span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Eyes of Wakanda <small>(Disney+ Animated)</small></span></label>
+    </div>
+  </article>
+
+  <!-- Phase 6 -->
+  <article class="card" data-phase>
+    <div class="phase-head">
+      <div class="phase-name">Phase 6</div>
+      <div class="phase-actions">
+        <button class="toggle">Toggle</button>
+        <button class="phase-check">Check</button>
+        <button class="phase-uncheck">Uncheck</button>
+      </div>
+    </div>
+    <div class="list">
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Fantastic Four</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Captain America: Brave New World</span></label>
+      <label class="item"><input type="checkbox" /><span class="tick"><i></i></span><span class="label">Thunderbolts</span></label>
+    </div>
+  </article>
+
+</section>
+
+  </main>  <footer>
+    Built with ♥ by JIRID-MAN.
+  </footer>  <script>
+    // Expand/Collapse logic per phase
+    document.querySelectorAll('[data-phase]').forEach(card => {
+      const list = card.querySelector('.list');
+      const toggle = card.querySelector('.toggle');
+      let collapsed = false;
+      toggle.addEventListener('click', () => {
+        collapsed = !collapsed;
+        list.style.display = collapsed ? 'none' : '';
+        toggle.textContent = collapsed ? 'Expand' : 'Toggle';
+      });
+
+      // Check/Uncheck buttons per phase
+      const checkBtn = card.querySelector('.phase-check');
+      const uncheckBtn = card.querySelector('.phase-uncheck');
+      checkBtn.addEventListener('click', () => card.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = true));
+      uncheckBtn.addEventListener('click', () => card.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false));
+    });
+
+    // Global actions
+    const allCheckboxes = () => Array.from(document.querySelectorAll('input[type="checkbox"]'));
+    document.getElementById('checkAll').addEventListener('click', () => allCheckboxes().forEach(c => c.checked = true));
+    document.getElementById('uncheckAll').addEventListener('click', () => allCheckboxes().forEach(c => c.checked = false));
+
+    document.getElementById('expandAll').addEventListener('click', () => {
+      document.querySelectorAll('[data-phase] .list').forEach(list => list.style.display = '');
+      document.querySelectorAll('[data-phase] .toggle').forEach(btn => btn.textContent = 'Toggle');
+    });
+
+    document.getElementById('collapseAll').addEventListener('click', () => {
+      document.querySelectorAll('[data-phase] .list').forEach(list => list.style.display = 'none');
+      document.querySelectorAll('[data-phase] .toggle').forEach(btn => btn.textContent = 'Expand');
+    });
+  </script></body>
+</html>
